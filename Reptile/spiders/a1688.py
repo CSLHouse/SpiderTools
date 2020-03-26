@@ -21,7 +21,7 @@ class A1688Spider(scrapy.Spider):
     # allowed_domains = ['s.1688.com']
     # start_urls = ['http://s.1688.com/']
     def start_requests(self):
-        url = "https://s.1688.com/selloffer/offer_search.htm?keywords=%s&n=y&netType=1%2C11&encode=utf-8&spm=a260k.dacugeneral.search.0".format(KEYWORD)
+        url = "https://s.1688.com/selloffer/offer_search.htm?keywords={0}&n=y&netType=1%2C11&encode=utf-8&spm=a260k.dacugeneral.search.0".format(KEYWORD)
         yield scrapy.Request(url=url, callback=self.parse, encoding='gb2312')
 
         # for page in range(1, int(PAGE)+1):
