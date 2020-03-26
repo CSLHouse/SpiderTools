@@ -21,13 +21,20 @@ class A1688Spider(scrapy.Spider):
     # allowed_domains = ['s.1688.com']
     # start_urls = ['http://s.1688.com/']
     def start_requests(self):
-        for page in range(1, int(PAGE)+1):
+        url = "https://s.1688.com/selloffer/offer_search.htm?keywords=%s&n=y&netType=1%2C11&encode=utf-8&spm=a260k.dacugeneral.search.0".format(KEYWORD)
+        yield scrapy.Request(url=url, callback=self.parse, encoding='gb2312')
+
+        # for page in range(1, int(PAGE)+1):
             
-            url = 'https://s.1688.com/selloffer/offer_search.htm?keywords=%s&n=y&netType=16&beginPage=%s#sm-filtbar' % (KEYWORD, page)
-            yield scrapy.Request(url=url, callback=self.parse, encoding='gb2312')
+        #     url = 'https://s.1688.com/selloffer/offer_search.htm?keywords=%s&n=y&netType=16&beginPage=%s#sm-filtbar' % (KEYWORD, page)
+        #     yield scrapy.Request(url=url, callback=self.parse, encoding='gb2312')
 
     def parse(self, response):
-        
+        maxpage = response.xpath('//*/div/@data-total-page').extract_first()
+        for page in range(1, int(maxpage)+1):
+            url = 'https://s.1688.com/selloffer/offer_search.htm?keywords=%s&n=y&netType=16&beginPage=%s#sm-filtbar' % (KEYWORD, page)
+            yield scrapy.Request(url=url, callback=self.parse_datas, encoding='gb2312')
+    def parse_datas(self, response):
         for tag in response.css('.sw-dpl-offer-item').extract():
             try:
                 # 从response中利用css选择器提取出来的标签是文本形式，需要利用 BeautifulSoup 转换成BeautifulSoup.Tag 对象进行进一步提取。
