@@ -11,7 +11,7 @@ class ReptilePipeline(object):
     def __init__(self):
         self.wb = Workbook()
         self.ws = self.wb.active
-        self.ws.append(['标题', '公司', '价格', '销量', 'method', 'rebuy', '地址', '保险'])
+        self.ws.append(['标题', '公司', '价格', '30天销量(元)', 'method', 'rebuy', '地址', '保险'])
 
     def process_item(self, item, spider):
         line = [item['title'], item['company'], item['price'], item['sell'], item['method'], item['rebuy'], item['address'], item['subicon']]
