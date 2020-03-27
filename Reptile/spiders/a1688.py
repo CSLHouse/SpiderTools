@@ -26,7 +26,7 @@ class A1688Spider(scrapy.Spider):
 
     def parse(self, response):
         maxpage = response.xpath('//*/div/@data-total-page').extract_first()
-        max =  PAGE if (PAGE>0 and PAGE<maxpage) else int(maxpage)+1
+        max =  PAGE if (PAGE>0 and PAGE<int(maxpage)) else int(maxpage)+1
         for page in range(0,  max):
             url = 'https://s.1688.com/selloffer/offer_search.htm?keywords=%s&n=y&netType=16&beginPage=%s#sm-filtbar' % (KEYWORD, page + 1)
             yield scrapy.Request(url=url, callback=self.parse_datas, encoding='gb2312')
