@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from Reptile.items import ReptileItem
 
 KEYWORD = "春夏女装"
-PAGE=1
+PAGE = 1
 class A1688Spider(scrapy.Spider):
     def __init__(self):
         self.item = ReptileItem()
@@ -24,11 +24,6 @@ class A1688Spider(scrapy.Spider):
         url = "https://s.1688.com/selloffer/offer_search.htm?keywords={0}&n=y&netType=1%2C11&encode=utf-8&spm=a260k.dacugeneral.search.0".format(KEYWORD)
         yield scrapy.Request(url=url, callback=self.parse, encoding='gb2312')
 
-        # for page in range(1, int(PAGE)+1):
-            
-        #     url = 'https://s.1688.com/selloffer/offer_search.htm?keywords=%s&n=y&netType=16&beginPage=%s#sm-filtbar' % (KEYWORD, page)
-        #     yield scrapy.Request(url=url, callback=self.parse, encoding='gb2312')
-
     def parse(self, response):
         maxpage = response.xpath('//*/div/@data-total-page').extract_first()
         max = int(maxpage)+1 if (PAGE==0) else PAGE
@@ -44,11 +39,11 @@ class A1688Spider(scrapy.Spider):
                 self.item['title'] = soup.select(".sw-dpl-offer-photo img")[0].attrs['alt']
                 self.item['company'] = soup.select(".sw-dpl-offer-companyName")[0].attrs['title']
                 self.item['price'] = soup.select(".sw-dpl-offer-priceNum")[0].attrs['title']
-                print("------------price---", self.item['price'])
+                # print("------------price---", self.item['price'])
                 if self.item['price'] and self.item['price'] != '':
                     self.item['price'] = self.item['price'][1:]
                 self.item['sell'] = soup.select(".sm-offer-tradeBt")[0].attrs['title']
-                print("------------sell---", self.item['sell'])
+                # print("------------sell---", self.item['sell'])
                 if self.item['sell'] and self.item['sell'] != "":
                     self.item['sell'] = self.item['sell'][5:-1]
                 self.item['rebuy'] =soup.select(".sm-widget-offershopwindowshoprepurchaserate span")[2].string
